@@ -1,0 +1,16 @@
+[project]
+name = "velib"
+version = "0.1.0"
+description = "Paris Vélib' Operations Intelligence: live data pipeline, shortage forecasts and truck rebalancing."
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 110
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]

@@ -1,0 +1,14 @@
+{"lastUpdatedOther": 1762415220, "ttl": 3600, "data": {"stations": [
+ {"stationCode": "16107", "station_id": 213688169, "num_bikes_available": 5, "numBikesAvailable": 5,
+  "num_bikes_available_types": [{"mechanical": 2}, {"ebike": 3}], "num_docks_available": 30, "numDocksAvailable": 30,
+  "is_installed": 1, "is_returning": 1, "is_renting": 1, "last_reported": 1762415100},
+ {"stationCode": "6015", "station_id": 99950133, "num_bikes_available": 0, "numBikesAvailable": 0,
+  "num_bikes_available_types": [{"mechanical": 0}, {"ebike": 0}], "num_docks_available": 55, "numDocksAvailable": 55,
+  "is_installed": 1, "is_returning": 1, "is_renting": 1, "last_reported": 1762414900},
+ {"stationCode": "9020", "station_id": 36255, "num_bikes_available": 40, "numBikesAvailable": 40,
+  "num_bikes_available_types": [{"mechanical": 30}, {"ebike": 9}], "num_docks_available": 0, "numDocksAvailable": 0,
+  "is_installed": 1, "is_returning": 0, "is_renting": 1, "last_reported": 1762415000},
+ {"stationCode": "12109", "station_id": 54000559, "num_bikes_available": 12, "numBikesAvailable": 12,
+  "num_bikes_available_types": [{"mechanical": 12}, {"ebike": 0}], "num_docks_available": 30, "numDocksAvailable": 30,
+  "is_installed": 1, "is_returning": 1, "is_renting": 1, "last_reported": 1762415010}
+]}}

@@ -1,0 +1,4 @@
+# Full development environment. Later phases add duckdb, lightgbm, shap, ortools, streamlit...
+-r requirements-collect.txt
+pytest==9.1.1
+ruff==0.16.9

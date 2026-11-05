@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Data: data/raw, data/daily and data/stations ARE committed by the collector.
+# Put any big local experiments (e.g. the Hugging Face history) in data/local/.
+data/local/
+*.parquet.tmp
+*.csv
+
+# Power BI: keep the .pbix, ignore lock / temp files
+powerbi/*.pbix.lock
+~$*
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
