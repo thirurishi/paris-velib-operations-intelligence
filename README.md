@@ -5,10 +5,11 @@
 [![CI](https://github.com/thirurishi/paris-velib-operations-intelligence/actions/workflows/ci.yml/badge.svg)](https://github.com/thirurishi/paris-velib-operations-intelligence/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.12-blue)
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
+[![Live app](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://velib-ops-thiru.streamlit.app/)
 
 > **I built a system that collects live Vélib' data every 15 minutes, predicts which stations will be empty or full in the next 2 hours, and tells rebalancing trucks where to go first.**
 
-**🔗 Live app:** _add your Streamlit link here after deploying_ · **📊 Power BI:** [`powerbi/`](powerbi/)
+**🔗 Live app: [velib-ops-thiru.streamlit.app](https://velib-ops-thiru.streamlit.app/)** · **📊 Power BI:** [`powerbi/`](powerbi/)
 
 **Data collected so far:**
 <!-- AUTO:STATUS -->
