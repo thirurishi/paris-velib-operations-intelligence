@@ -1,0 +1,27 @@
+flowchart LR
+    subgraph Sources
+        A[Vélib' GBFS feeds<br/>station_status · station_information]
+        B[Open-Meteo<br/>Paris weather]
+    end
+    subgraph GitHub Actions
+        C[Collector loop<br/>every 15 min · retries · validation]
+        N[Nightly build<br/>analytics · weekly retrain · README]
+    end
+    D[(Parquet in repo<br/>raw → daily files)]
+    E[DuckDB SQL marts<br/>hourly · reliability · areas · weather · quality]
+    F[Power BI<br/>3-page dashboard]
+    G[LightGBM<br/>+1h/+2h bikes · empty/full risk · SHAP]
+    H[OR-Tools<br/>truck routing with capacity + time]
+    I[Streamlit app<br/>risk map · forecasts · truck plan]
+    A --> C
+    B --> C
+    C --> D
+    D --> N
+    N --> E
+    E --> F
+    N --> G
+    D --> G
+    G --> H
+    A -. live .-> I
+    G --> I
+    H --> I

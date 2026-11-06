@@ -1,0 +1,57 @@
+// ===== Paris Vélib' Operations Intelligence: DAX measures =====
+// Create a table called "Measures" (Enter data -> empty table), then add each measure.
+
+Stations = DISTINCTCOUNT ( dim_station[station_id] )
+
+Days Observed = DISTINCTCOUNT ( mart_station_hourly[local_date] )
+
+Empty Station Hours = SUM ( mart_station_hourly[empty_hours] )
+
+Full Station Hours = SUM ( mart_station_hourly[full_hours] )
+
+Empty Hours per Day = DIVIDE ( [Empty Station Hours], [Days Observed] )
+
+Full Hours per Day = DIVIDE ( [Full Station Hours], [Days Observed] )
+
+% Time Empty =
+DIVIDE (
+    SUMX ( mart_station_hourly, mart_station_hourly[share_empty] * mart_station_hourly[n_snapshots] ),
+    SUM ( mart_station_hourly[n_snapshots] )
+)
+
+% Time Full =
+DIVIDE (
+    SUMX ( mart_station_hourly, mart_station_hourly[share_full] * mart_station_hourly[n_snapshots] ),
+    SUM ( mart_station_hourly[n_snapshots] )
+)
+
+Avg Fill Ratio =
+DIVIDE (
+    SUMX ( mart_station_hourly, mart_station_hourly[avg_fill_ratio] * mart_station_hourly[n_snapshots] ),
+    SUM ( mart_station_hourly[n_snapshots] )
+)
+
+Activity (bike moves) = SUM ( mart_station_hourly[activity] )
+
+Activity per Station-Hour =
+DIVIDE ( [Activity (bike moves)], COUNTROWS ( mart_station_hourly ) )
+
+// "20 stations cause X% of all empty-station hours"
+Top 20 Share of Empty Hours =
+VAR Top20 =
+    TOPN ( 20, ALL ( dim_station[station_id] ), [Empty Station Hours], DESC )
+RETURN
+    DIVIDE (
+        CALCULATE ( [Empty Station Hours], Top20 ),
+        CALCULATE ( [Empty Station Hours], ALL ( dim_station ) )
+    )
+
+Rain Activity vs Dry =
+VAR Wet =
+    CALCULATE ( [Activity per Station-Hour], mart_station_hourly[precip_mm] > 0 )
+VAR Dry =
+    CALCULATE ( [Activity per Station-Hour], mart_station_hourly[precip_mm] = 0 )
+RETURN
+    DIVIDE ( Wet, Dry ) - 1
+
+Collection Coverage = AVERAGE ( mart_data_quality[coverage] )

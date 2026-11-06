@@ -1,0 +1,10 @@
+{
+  "name": "Velib Ops",
+  "dataColors": ["#2a6f97", "#d62728", "#f28e2b", "#2e9e5b", "#7a5195", "#adb5bd", "#61a5c2", "#ef5675"],
+  "background": "#FFFFFF",
+  "foreground": "#1d2b36",
+  "tableAccent": "#2a6f97",
+  "good": "#2e9e5b",
+  "neutral": "#f28e2b",
+  "bad": "#d62728"
+}

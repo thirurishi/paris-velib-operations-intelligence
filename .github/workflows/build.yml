@@ -1,0 +1,68 @@
+# Nightly: rebuild analytics + insights, retrain the model on Mondays, refresh the README.
+# Commits only small files (reports/, models/, docs/img/, README.md).
+name: Nightly build
+
+on:
+  schedule:
+    - cron: "41 3 * * *" # 03:41 UTC every day (after the daily data file is compacted)
+  workflow_dispatch:
+    inputs:
+      retrain:
+        description: "Retrain the model now (otherwise only on Mondays or if no model exists)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nightly-build
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      PYTHONPATH: src
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Analytics + insights (Phase 2)
+        run: python -m velib.analytics
+
+      - name: Train model (Phase 3) on Mondays, on request, or if none exists yet
+        run: |
+          if [ "${{ inputs.retrain }}" = "true" ] || [ ! -f models/meta.json ] || [ "$(date -u +%u)" = "1" ]; then
+            python -m velib.train
+          else
+            echo "Not Monday and a model exists: skipping training."
+          fi
+
+      - name: Update README numbers + CV bullets
+        run: python -m velib.report
+
+      - name: Commit results
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports/ models/ docs/img/ README.md
+          if git diff --cached --quiet; then
+            echo "Nothing changed."
+            exit 0
+          fi
+          git commit -m "build: nightly analytics $(date -u +%Y-%m-%d)"
+          for attempt in 1 2 3 4 5; do
+            git pull -q --rebase origin "${GITHUB_REF_NAME}" && git push -q && exit 0
+            echo "Push failed (attempt $attempt), retrying in 20 s..."
+            sleep 20
+          done
+          exit 1

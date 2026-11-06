@@ -62,9 +62,7 @@ def test_parse_station_status_splits_bike_types():
 
 
 def test_status_flags_accept_ints_and_bools():
-    payload = {
-        "data": {"stations": [{"station_id": 1, "is_installed": True, "is_renting": 0, "is_returning": 1}]}
-    }
+    payload = {"data": {"stations": [{"station_id": 1, "is_installed": True, "is_renting": 0, "is_returning": 1}]}}
     row = collect.parse_station_status(payload).iloc[0]
     assert (bool(row.is_installed), bool(row.is_renting), bool(row.is_returning)) == (True, False, True)
 

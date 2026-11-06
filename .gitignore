@@ -9,9 +9,12 @@ venv/
 .ruff_cache/
 .ipynb_checkpoints/
 
-# Data: data/raw, data/daily and data/stations ARE committed by the collector.
-# Put any big local experiments (e.g. the Hugging Face history) in data/local/.
+# Data: data/raw, data/daily, data/stations and data/reference ARE committed.
+# Generated locally (rebuild with python -m velib.analytics / velib.predict):
+data/marts/
+data/forecasts/
 data/local/
+data_synthetic/
 *.parquet.tmp
 *.csv
 

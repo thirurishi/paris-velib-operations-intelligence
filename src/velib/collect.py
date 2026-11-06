@@ -60,8 +60,7 @@ MIN_EXPECTED_STATIONS = 1000  # Vélib' has ~1,400. Fewer means a broken feed.
 STALE_FEED_MINUTES = 30  # Warn if the operator's data is older than this.
 
 USER_AGENT = (
-    "paris-velib-operations-intelligence/0.1 "
-    "(+https://github.com/thirurishi/paris-velib-operations-intelligence)"
+    "paris-velib-operations-intelligence/0.1 (+https://github.com/thirurishi/paris-velib-operations-intelligence)"
 )
 
 log = logging.getLogger("velib.collect")
@@ -165,9 +164,7 @@ def parse_station_status(payload: dict) -> pd.DataFrame:
         # GBFS 1.0 uses 0/1, newer versions use true/false: both become bool.
         as_int = df[col].map(lambda v: int(v) if isinstance(v, (bool, int)) else None)
         df[col] = pd.to_numeric(as_int, errors="coerce").astype("Int8").astype("boolean")
-    df["last_reported"] = pd.to_datetime(
-        pd.to_numeric(df["last_reported"], errors="coerce"), unit="s", utc=True
-    )
+    df["last_reported"] = pd.to_datetime(pd.to_numeric(df["last_reported"], errors="coerce"), unit="s", utc=True)
     return df
 
 
@@ -288,8 +285,12 @@ def check_feed_health(df: pd.DataFrame) -> None:
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
-def collect(now: datetime | None = None) -> pd.DataFrame:
-    """Run one full collection and return the saved snapshot."""
+def fetch_snapshot(now: datetime | None = None) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
+    """Download and clean one snapshot WITHOUT saving it.
+
+    Returns (snapshot, station_information, weather). Used by the collector and
+    by the Streamlit app for live data.
+    """
     now = now or datetime.now(UTC)
     session = make_session()
 
@@ -322,7 +323,20 @@ def collect(now: datetime | None = None) -> pd.DataFrame:
 
     snapshot = validate(build_snapshot(status, info, weather, now))
     check_feed_health(snapshot)
+    return snapshot, info, weather
 
+
+def collect(now: datetime | None = None) -> pd.DataFrame | None:
+    """Run one full collection and return the saved snapshot.
+
+    Returns None (and saves nothing) if this 15-minute slot was already collected.
+    """
+    now = now or datetime.now(UTC)
+    if storage.slot_already_collected(now):
+        log.info("Slot %s already collected, skipping", pd.Timestamp(now).floor("15min"))
+        return None
+
+    snapshot, info, weather = fetch_snapshot(now)
     path = storage.write_snapshot(snapshot, now)
     storage.save_stations(info, now)
     storage.compact_past_days(now)

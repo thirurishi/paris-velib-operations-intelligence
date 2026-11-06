@@ -1,98 +1,146 @@
 # 🚲 Paris Vélib' Operations Intelligence
 
 [![Collect Vélib data](https://github.com/thirurishi/paris-velib-operations-intelligence/actions/workflows/collect.yml/badge.svg)](https://github.com/thirurishi/paris-velib-operations-intelligence/actions/workflows/collect.yml)
+[![Nightly build](https://github.com/thirurishi/paris-velib-operations-intelligence/actions/workflows/build.yml/badge.svg)](https://github.com/thirurishi/paris-velib-operations-intelligence/actions/workflows/build.yml)
 [![CI](https://github.com/thirurishi/paris-velib-operations-intelligence/actions/workflows/ci.yml/badge.svg)](https://github.com/thirurishi/paris-velib-operations-intelligence/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.12-blue)
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
 
-> Predict which Vélib' stations will run out of bikes or docks in the next 2 hours, and recommend where rebalancing trucks should go first.
+> **I built a system that collects live Vélib' data every 15 minutes, predicts which stations will be empty or full in the next 2 hours, and tells rebalancing trucks where to go first.**
 
-**Status:** 🟢 Phase 1 (data pipeline) live: collecting every 15 minutes since November 2026.
-Analytics, forecasting and the rebalancing app are next.
+**🔗 Live app:** _add your Streamlit link here after deploying_ · **📊 Power BI:** [`powerbi/`](powerbi/)
+
+**Data collected so far:**
+<!-- AUTO:STATUS -->
+_Collection running. Numbers appear after the first nightly analytics run._
+<!-- /AUTO:STATUS -->
 
 ---
 
-## The problem
+## Executive summary
 
-Vélib' Métropole runs about 1,400 stations across Paris and 55 nearby towns. Every rush hour,
-residential stations empty out and business-district stations fill up, so riders cannot take or
-return a bike. The operator moves bikes with a limited number of trucks, which raises one question:
+**Problem.** Vélib' Métropole runs ~1,500 stations across Paris and 55 nearby towns. At rush hour, residential
+stations run out of bikes and business-district stations fill up, so riders can't take or return a bike.
+The operator moves bikes with a small truck fleet, so the real question is:
+*which stations will have a problem soon, and in what order should the trucks visit them?*
 
-**Which stations will have a problem soon, and in what order should the trucks visit them?**
+**Key findings** (computed automatically from the collected data, refreshed nightly):
+<!-- AUTO:INSIGHTS -->
+_Insights are generated automatically from the collected data (see `reports/insights.md`)._
+<!-- /AUTO:INSIGHTS -->
 
-## What this project delivers
+**Recommendation.** Dispatch trucks from the 2-hour risk forecast instead of from current counts: the
+forecast flags stations *before* they empty, and OR-Tools routing serves the most valuable stops within
+each truck's capacity and shift. A small set of chronic problem stations deserves structural fixes
+(more docks, or a standing morning delivery) rather than daily truck visits.
 
-| # | Deliverable | Status |
+**Estimated impact.** For every plan, the app reports the expected empty/full station-hours prevented in the
+next 2 hours and compares OR-Tools against *no action*, a *greedy* dispatcher and visiting the same risky
+stations in a *random order* (see the "Rebalancing plan" tab).
+
+---
+
+## Architecture
+
+![Architecture](docs/architecture.png)
+
+| Step | Tool | What it does |
 |---|---|---|
-| 1 | Automated pipeline: live station data every 15 min | ✅ Running |
-| 2 | Power BI analytics: patterns, worst stations, rush hours, weather | ⏳ Phase 2 |
-| 3 | LightGBM forecast of bikes per station at +1h / +2h | ⏳ Phase 3 |
-| 4 | Empty / full risk alerts | ⏳ Phase 3 |
-| 5 | OR-Tools truck rebalancing plan | ⏳ Phase 4 |
-| 6 | Live Streamlit map app | ⏳ Phase 5 |
+| Collect | Python, GitHub Actions | Loop job collects every 15 min, commits Parquet, restarts itself every ~5.5 h |
+| Store | Parquet (one file per day) | ~4 MB/day, read by pandas, DuckDB and Power BI |
+| Transform | DuckDB SQL ([`sql/`](sql/)) | Raw snapshots → hourly, reliability, area, weather and data-quality tables |
+| Analyse | Power BI | 3-page dashboard ([build guide](powerbi/README.md)) |
+| Forecast | LightGBM, SHAP | Bikes at +1h/+2h and empty/full risk within 2h, explained with SHAP |
+| Optimise | Google OR-Tools | Truck routes with capacity, shift length and optional stops |
+| Serve | Streamlit + pydeck | Live risk map, station forecasts, truck plan |
+| Quality | pytest, ruff, CI, Docker | 26 tests, lint on every push, containerised app |
 
-## Pipeline (Phase 1)
+## Data
 
-```
-Vélib' GBFS feeds ─┐
-                   ├─► GitHub Actions (every 15 min) ─► Python collector ─► Parquet in data/
-Open-Meteo weather ┘        retries · validation · logging      (compacted to 1 file per day)
-```
+| Data | Source | Collection |
+|---|---|---|
+| Station status (bikes, e-bikes, docks, flags) | [Vélib' Métropole GBFS](https://opendata.paris.fr/explore/dataset/velib-disponibilite-en-temps-reel/) `station_status.json` | every 15 min |
+| Station list (name, lat/lon, capacity) | Vélib' GBFS `station_information.json` | daily |
+| Weather (temperature, rain, wind) | [Open-Meteo](https://open-meteo.com/) | every 15 min |
+| Commune boundaries | [france-geojson](https://github.com/gregoiredavid/france-geojson) (IGN/INSEE) | static |
+| Holidays | `holidays` (France) + Paris Zone C school calendar 2026–27 | static |
 
-Each run:
+Every row is validated (no negative counts, bikes + docks ≤ capacity, mechanical + e-bikes = total) and flagged
+rather than silently dropped. Data health is tracked in `mart_data_quality` and by `python -m velib.check_data`.
 
-1. Downloads `station_status` and `station_information` from the official Vélib' GBFS feed, plus current Paris weather.
-2. Cleans and joins them into one row per station (~1,400 rows).
-3. Validates every row (no negative counts, bikes + docks ≤ capacity, mechanical + e-bike = total) and flags problems instead of hiding them.
-4. Saves a small Parquet file; the first run after midnight UTC merges the previous day into `data/daily/`.
+## Forecasting
 
-### Snapshot table
+- **Target:** bikes available at **+1h** and **+2h**, plus the probability of hitting **0 bikes** or **0 docks** within 2h.
+- **Features:** current state, momentum (15/30/60 min), same time yesterday / last week (also at the target time),
+  hour, weekday, public & school holidays, weather, capacity, location, spatial cluster.
+- **Validation:** time-based split (last 7 days = test), never random. Baselines: persistence, seasonal, and a
+  "≤ 2 bikes now" alert rule. Retrained every Monday by the nightly build.
 
-| Column | Meaning |
-|---|---|
-| `snapshot_ts` / `slot_ts` | Collection time (UTC) / its 15-minute slot |
-| `station_id`, `station_code` | Station identifiers (`station_code` is the public code) |
-| `capacity` | Total docks |
-| `bikes_mechanical`, `bikes_ebike`, `bikes_total` | Bikes available |
-| `docks_available` | Free docks |
-| `is_installed`, `is_renting`, `is_returning` | Station status flags |
-| `last_reported` | Operator's last update for this station (UTC) |
-| `weather_*` | Temperature, precipitation, rain, wind, cloud cover, WMO weather code |
-| `is_valid`, `validation_issue` | Data-quality flag and reason |
+<!-- AUTO:MODEL -->
+_The model trains automatically once a few days of data are collected (weekly retraining)._
+<!-- /AUTO:MODEL -->
+
+## Rebalancing optimisation
+
+1. **Tasks:** stations with ≥ 30% empty risk get a drop-off (up to 40% fill); ≥ 30% full risk get a pick-up
+   (down to 60% fill); healthy stations with spare bikes near the drop-offs can donate.
+2. **Value of a stop** = risk probability × 1 hour (expected problem-hours prevented).
+3. **OR-Tools** vehicle routing: trucks (default 3 × 20 bikes) start at a depot with bikes on board; the load must
+   stay between 0 and capacity; each route must fit the 2-hour window (travel at 15 km/h × 1.35 street factor,
+   4 min per stop + 30 s per bike). Stops are optional; skipping one costs its value, so the solver picks the best set.
+4. **Benchmarks:** no action, random order, greedy (best value per minute).
 
 ## Run it locally
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
+source .venv/bin/activate                 # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
+export PYTHONPATH=src                     # Windows PowerShell: $env:PYTHONPATH="src"
 
-export PYTHONPATH=src              # Windows PowerShell: $env:PYTHONPATH="src"
-python -m velib.collect            # collect one snapshot now
-python -m velib.check_data         # data-quality report
-pytest                             # tests (no internet needed)
+python -m velib.collect                   # collect one snapshot now
+python -m velib.check_data                # data-quality report
+python -m velib.analytics                 # DuckDB marts + reports/insights.md
+python -m velib.train                     # train + evaluate (needs ≥ 3 days of data)
+python -m velib.predict                   # riskiest stations right now
+python -m velib.optimise                  # truck plan + strategy comparison
+streamlit run app/streamlit_app.py        # the app
+pytest                                    # 26 tests
 ```
+
+No data yet? `python -m velib.simulate --days 35 --out data_synthetic` creates a **synthetic** network to try
+everything (`VELIB_DATA_DIR=data_synthetic python -m velib.analytics`). It is clearly separated and never mixed with real data.
+
+Docker: `docker build -t velib-ops . && docker run -p 8501:8501 velib-ops`
 
 ## Repository structure
 
 ```
-.github/workflows/   collect.yml (every 15 min) · ci.yml (lint + tests)
-src/velib/           collect.py · storage.py · check_data.py · (features, train, predict, optimise: coming)
-data/                raw/ · daily/ · stations/   (written by the collector)
-tests/               pytest suite with sample feed files
-sql/ notebooks/ powerbi/ app/ docs/   later phases
+.github/workflows/  collect.yml (15-min loop) · build.yml (nightly) · ci.yml (tests)
+src/velib/          collect · storage · check_data · geo · analytics · features · train · predict · optimise · report · simulate
+sql/                DuckDB models (staging + 6 marts)
+app/                Streamlit app
+notebooks/          01_eda · 02_baselines · 03_model_shap
+powerbi/            build guide, DAX measures, theme (+ your .pbix)
+models/  reports/   trained models and auto-generated results
+data/               raw/ · daily/ · stations/ · reference/
+tests/              pytest suite
 ```
 
-## Data sources & licences
+## Limitations & next steps
 
-- **Vélib' Métropole real-time availability** (GBFS):
-  [opendata.paris.fr](https://opendata.paris.fr/explore/dataset/velib-disponibilite-en-temps-reel/).
-  © Smovengo / Syndicat Autolib' Vélib' Métropole, [Open Database License (ODbL)](https://opendatacommons.org/licenses/odbl/).
-- **Weather:** [Open-Meteo.com](https://open-meteo.com/), CC BY 4.0.
-- **Code:** MIT licence.
+- **No trip data:** Vélib' publishes station counts only, so demand is inferred from count changes (a lower bound).
+- **Truck model is simplified:** straight-line distances, one assumed depot, no traffic or driver breaks.
+- **Station-level operator actions are invisible:** real trucks already rebalance, which hides part of the demand.
+- **Next:** probabilistic forecasts (quantiles), event calendar (strikes, marathons), road-network travel times
+  (OSRM), and a feedback loop measuring whether served stations actually stayed available.
+
+## Licences & credits
+
+Code: MIT. Vélib' data © Smovengo / Syndicat Autolib' Vélib' Métropole, [ODbL](https://opendatacommons.org/licenses/odbl/).
+Weather: Open-Meteo.com (CC BY 4.0). Commune boundaries: IGN / INSEE via france-geojson.
 
 ## About
 
-Built by **Thirumurugan Kumar**, MSc Data Science & Analytics (EPITA, Paris).
-Looking for a Data / Business Operations internship from January 2027.
-GitHub: [@thirurishi](https://github.com/thirurishi)
+Built by **Thirumurugan Kumar**, MSc Data Science & Analytics (EPITA, Paris), looking for a Data / Business
+Operations internship from January 2027. GitHub [@thirurishi](https://github.com/thirurishi).

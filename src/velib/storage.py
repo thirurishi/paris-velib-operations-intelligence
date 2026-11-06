@@ -118,6 +118,21 @@ def write_snapshot(df: pd.DataFrame, snapshot_ts: datetime) -> Path:
     return path
 
 
+def slot_already_collected(snapshot_ts: datetime) -> bool:
+    """True if today's raw folder already holds a snapshot in the same 15-minute slot.
+
+    Protects against double collection when one workflow run hands over to the
+    next inside the same slot.
+    """
+    ts = pd.Timestamp(_utc(snapshot_ts))
+    slot = ts.floor("15min")
+    for f in raw_dir(ts.strftime("%Y-%m-%d")).glob("velib_*.parquet"):
+        stamp = pd.Timestamp(f.stem.removeprefix("velib_").replace("Z", ""), tz="UTC")
+        if stamp.floor("15min") == slot:
+            return True
+    return False
+
+
 def save_stations(info: pd.DataFrame, snapshot_ts: datetime) -> Path | None:
     """Save the station list once per UTC day (skip if today's file exists)."""
     day = _utc(snapshot_ts).strftime("%Y-%m-%d")
@@ -155,10 +170,19 @@ def compact_past_days(now: datetime) -> list[Path]:
 
 def read_all_snapshots() -> pd.DataFrame:
     """Load every snapshot (daily files + today's raw files) into one DataFrame."""
-    files = sorted((DATA_DIR / "daily").glob("*.parquet")) + sorted(
-        (DATA_DIR / "raw").glob("date=*/*.parquet")
-    )
+    files = sorted((DATA_DIR / "daily").glob("*.parquet")) + sorted((DATA_DIR / "raw").glob("date=*/*.parquet"))
     if not files:
         return pd.DataFrame(columns=SNAPSHOT_SCHEMA.names)
     tables = [pq.read_table(f, schema=SNAPSHOT_SCHEMA) for f in files]
     return pa.concat_tables(tables).to_pandas()
+
+
+def read_recent_snapshots(days: int = 8, now: datetime | None = None) -> pd.DataFrame:
+    """Load only the last `days` days (enough for lag features, much faster than everything)."""
+    now = _utc(now or datetime.now(UTC))
+    cutoff = (pd.Timestamp(now) - pd.Timedelta(days=days)).strftime("%Y-%m-%d")
+    files = [f for f in sorted((DATA_DIR / "daily").glob("velib_*.parquet")) if f.stem[6:] >= cutoff]
+    files += sorted((DATA_DIR / "raw").glob("date=*/*.parquet"))
+    if not files:
+        return pd.DataFrame(columns=SNAPSHOT_SCHEMA.names)
+    return pa.concat_tables([pq.read_table(f, schema=SNAPSHOT_SCHEMA) for f in files]).to_pandas()
