@@ -1,0 +1,78 @@
+{
+  "regression": [
+    {
+      "horizon": "1h",
+      "method": "Persistence (same as now)",
+      "mae_bikes": 1.637,
+      "vs_persistence": 0.0
+    },
+    {
+      "horizon": "1h",
+      "method": "Seasonal (same time last week)",
+      "mae_bikes": 5.838,
+      "vs_persistence": 2.567
+    },
+    {
+      "horizon": "1h",
+      "method": "LightGBM",
+      "mae_bikes": 1.701,
+      "vs_persistence": 0.04
+    },
+    {
+      "horizon": "2h",
+      "method": "Persistence (same as now)",
+      "mae_bikes": 2.517,
+      "vs_persistence": 0.0
+    },
+    {
+      "horizon": "2h",
+      "method": "Seasonal (same time last week)",
+      "mae_bikes": 5.877,
+      "vs_persistence": 1.335
+    },
+    {
+      "horizon": "2h",
+      "method": "LightGBM",
+      "mae_bikes": 2.569,
+      "vs_persistence": 0.021
+    }
+  ],
+  "alerts": [
+    {
+      "event": "empty_2h",
+      "method": "Rule: <= 2 now",
+      "base_rate": 0.101,
+      "precision": 0.489,
+      "recall": 0.758,
+      "avg_precision": 0.395,
+      "alerts_per_slot": 233.9
+    },
+    {
+      "event": "empty_2h",
+      "method": "LightGBM",
+      "base_rate": 0.101,
+      "precision": 0.781,
+      "recall": 0.499,
+      "avg_precision": 0.712,
+      "alerts_per_slot": 96.6
+    },
+    {
+      "event": "full_2h",
+      "method": "Rule: <= 2 now",
+      "base_rate": 0.0591,
+      "precision": 0.483,
+      "recall": 0.712,
+      "avg_precision": 0.361,
+      "alerts_per_slot": 130.3
+    },
+    {
+      "event": "full_2h",
+      "method": "LightGBM",
+      "base_rate": 0.0591,
+      "precision": 0.733,
+      "recall": 0.51,
+      "avg_precision": 0.676,
+      "alerts_per_slot": 61.5
+    }
+  ]
+}

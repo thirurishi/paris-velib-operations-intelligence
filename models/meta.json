@@ -1,0 +1,208 @@
+{
+  "trained_at": "2026-11-09T12:07:30+00:00",
+  "days": 3.5,
+  "train_start": "2026-11-05 23:00:00+00:00",
+  "train_end": "2026-11-08 08:15:00+00:00",
+  "test_start": "2026-11-08 10:30:00+00:00",
+  "test_end": "2026-11-09 12:00:00+00:00",
+  "test_rows": 154125,
+  "alert_threshold": 0.5,
+  "best_iterations": {
+    "bikes_1h": 202,
+    "bikes_2h": 216,
+    "empty_2h": 542,
+    "full_2h": 284
+  },
+  "results": {
+    "regression": [
+      {
+        "horizon": "1h",
+        "method": "Persistence (same as now)",
+        "mae_bikes": 1.637,
+        "vs_persistence": 0.0
+      },
+      {
+        "horizon": "1h",
+        "method": "Seasonal (same time last week)",
+        "mae_bikes": 5.838,
+        "vs_persistence": 2.567
+      },
+      {
+        "horizon": "1h",
+        "method": "LightGBM",
+        "mae_bikes": 1.701,
+        "vs_persistence": 0.04
+      },
+      {
+        "horizon": "2h",
+        "method": "Persistence (same as now)",
+        "mae_bikes": 2.517,
+        "vs_persistence": 0.0
+      },
+      {
+        "horizon": "2h",
+        "method": "Seasonal (same time last week)",
+        "mae_bikes": 5.877,
+        "vs_persistence": 1.335
+      },
+      {
+        "horizon": "2h",
+        "method": "LightGBM",
+        "mae_bikes": 2.569,
+        "vs_persistence": 0.021
+      }
+    ],
+    "alerts": [
+      {
+        "event": "empty_2h",
+        "method": "Rule: <= 2 now",
+        "base_rate": 0.101,
+        "precision": 0.489,
+        "recall": 0.758,
+        "avg_precision": 0.395,
+        "alerts_per_slot": 233.9
+      },
+      {
+        "event": "empty_2h",
+        "method": "LightGBM",
+        "base_rate": 0.101,
+        "precision": 0.781,
+        "recall": 0.499,
+        "avg_precision": 0.712,
+        "alerts_per_slot": 96.6
+      },
+      {
+        "event": "full_2h",
+        "method": "Rule: <= 2 now",
+        "base_rate": 0.0591,
+        "precision": 0.483,
+        "recall": 0.712,
+        "avg_precision": 0.361,
+        "alerts_per_slot": 130.3
+      },
+      {
+        "event": "full_2h",
+        "method": "LightGBM",
+        "base_rate": 0.0591,
+        "precision": 0.733,
+        "recall": 0.51,
+        "avg_precision": 0.676,
+        "alerts_per_slot": 61.5
+      }
+    ]
+  },
+  "shap_charts": [
+    "docs/img/shap_bikes_2h.png",
+    "docs/img/shap_empty_2h.png"
+  ],
+  "features": [
+    "bikes_now",
+    "docks_now",
+    "ebikes_now",
+    "usable_capacity",
+    "fill_now",
+    "d_bikes_15m",
+    "d_bikes_30m",
+    "d_bikes_60m",
+    "bikes_lag_1d",
+    "bikes_lag_7d",
+    "seas_1d_1h",
+    "seas_1d_2h",
+    "seas_7d_1h",
+    "seas_7d_2h",
+    "hour",
+    "dow",
+    "is_weekend",
+    "is_holiday",
+    "is_school_holiday",
+    "weather_temp_c",
+    "weather_precip_mm",
+    "weather_wind_kmh",
+    "capacity",
+    "lat",
+    "lon",
+    "cluster"
+  ],
+  "centroids": [
+    [
+      48.8834707063549,
+      2.4266210778697657
+    ],
+    [
+      48.84018565414818,
+      2.2941346639612896
+    ],
+    [
+      48.881626356629965,
+      2.3372264267998557
+    ],
+    [
+      48.80332156374701,
+      2.311285293381275
+    ],
+    [
+      48.78245464137026,
+      2.386818275030907
+    ],
+    [
+      48.87599788981458,
+      2.2082130160294
+    ],
+    [
+      48.841626887900986,
+      2.333131197164463
+    ],
+    [
+      48.79329468784991,
+      2.4474325581805436
+    ],
+    [
+      48.86018627382722,
+      2.3882635963285015
+    ],
+    [
+      48.82969544307301,
+      2.24994381368777
+    ],
+    [
+      48.91925468489964,
+      2.2589028042086743
+    ],
+    [
+      48.84417119995887,
+      2.474870880853991
+    ],
+    [
+      48.924224876109484,
+      2.3434253776059277
+    ],
+    [
+      48.84415034093364,
+      2.414045621318202
+    ],
+    [
+      48.86562332071385,
+      2.357236847472547
+    ],
+    [
+      48.871487857045025,
+      2.275493076784829
+    ],
+    [
+      48.82733498020932,
+      2.3679616906113172
+    ],
+    [
+      48.89510512480574,
+      2.381522302251593
+    ],
+    [
+      48.88469129952856,
+      2.306366619245046
+    ],
+    [
+      48.82465339139266,
+      2.193596834330137
+    ]
+  ]
+}
