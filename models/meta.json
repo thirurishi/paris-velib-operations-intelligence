@@ -1,93 +1,94 @@
 {
-  "trained_at": "2026-11-09T12:07:30+00:00",
-  "days": 3.5,
+  "trained_at": "2026-11-09T15:19:20+00:00",
+  "days": 3.7,
   "train_start": "2026-11-05 23:00:00+00:00",
-  "train_end": "2026-11-08 08:15:00+00:00",
-  "test_start": "2026-11-08 10:30:00+00:00",
-  "test_end": "2026-11-09 12:00:00+00:00",
-  "test_rows": 154125,
+  "train_end": "2026-11-08 10:30:00+00:00",
+  "test_start": "2026-11-08 12:45:00+00:00",
+  "test_end": "2026-11-09 15:15:00+00:00",
+  "test_rows": 160122,
   "alert_threshold": 0.5,
+  "regression_target": "delta",
   "best_iterations": {
-    "bikes_1h": 202,
-    "bikes_2h": 216,
-    "empty_2h": 542,
-    "full_2h": 284
+    "bikes_1h": 135,
+    "bikes_2h": 419,
+    "empty_2h": 345,
+    "full_2h": 247
   },
   "results": {
     "regression": [
       {
         "horizon": "1h",
         "method": "Persistence (same as now)",
-        "mae_bikes": 1.637,
+        "mae_bikes": 1.544,
         "vs_persistence": 0.0
       },
       {
         "horizon": "1h",
-        "method": "Seasonal (same time last week)",
-        "mae_bikes": 5.838,
-        "vs_persistence": 2.567
+        "method": "Seasonal (last week, else yesterday)",
+        "mae_bikes": 6.051,
+        "vs_persistence": 2.918
       },
       {
         "horizon": "1h",
         "method": "LightGBM",
-        "mae_bikes": 1.701,
-        "vs_persistence": 0.04
+        "mae_bikes": 1.579,
+        "vs_persistence": 0.022
       },
       {
         "horizon": "2h",
         "method": "Persistence (same as now)",
-        "mae_bikes": 2.517,
+        "mae_bikes": 2.398,
         "vs_persistence": 0.0
       },
       {
         "horizon": "2h",
-        "method": "Seasonal (same time last week)",
-        "mae_bikes": 5.877,
-        "vs_persistence": 1.335
+        "method": "Seasonal (last week, else yesterday)",
+        "mae_bikes": 6.102,
+        "vs_persistence": 1.545
       },
       {
         "horizon": "2h",
         "method": "LightGBM",
-        "mae_bikes": 2.569,
-        "vs_persistence": 0.021
+        "mae_bikes": 2.463,
+        "vs_persistence": 0.027
       }
     ],
     "alerts": [
       {
         "event": "empty_2h",
         "method": "Rule: <= 2 now",
-        "base_rate": 0.101,
-        "precision": 0.489,
-        "recall": 0.758,
-        "avg_precision": 0.395,
-        "alerts_per_slot": 233.9
+        "base_rate": 0.1081,
+        "precision": 0.492,
+        "recall": 0.79,
+        "avg_precision": 0.411,
+        "alerts_per_slot": 259.9
       },
       {
         "event": "empty_2h",
         "method": "LightGBM",
-        "base_rate": 0.101,
-        "precision": 0.781,
-        "recall": 0.499,
-        "avg_precision": 0.712,
-        "alerts_per_slot": 96.6
+        "base_rate": 0.1081,
+        "precision": 0.764,
+        "recall": 0.556,
+        "avg_precision": 0.73,
+        "alerts_per_slot": 117.8
       },
       {
         "event": "full_2h",
         "method": "Rule: <= 2 now",
-        "base_rate": 0.0591,
-        "precision": 0.483,
-        "recall": 0.712,
-        "avg_precision": 0.361,
-        "alerts_per_slot": 130.3
+        "base_rate": 0.0613,
+        "precision": 0.484,
+        "recall": 0.742,
+        "avg_precision": 0.375,
+        "alerts_per_slot": 140.7
       },
       {
         "event": "full_2h",
         "method": "LightGBM",
-        "base_rate": 0.0591,
-        "precision": 0.733,
-        "recall": 0.51,
-        "avg_precision": 0.676,
-        "alerts_per_slot": 61.5
+        "base_rate": 0.0613,
+        "precision": 0.751,
+        "recall": 0.541,
+        "avg_precision": 0.694,
+        "alerts_per_slot": 66.0
       }
     ]
   },

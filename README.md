@@ -13,7 +13,7 @@
 
 **Data collected so far:**
 <!-- AUTO:STATUS -->
-**5 days** collected (2026-11-05 → 2026-11-09) · **292 snapshots** · ~**437,124** station records · average coverage **61%** of 15-minute slots · 1,497 stations. _Last refreshed 2026-11-09 12:07 UTC._
+**5 days** collected (2026-11-05 → 2026-11-09) · **305 snapshots** · ~**456,585** station records · average coverage **84%** of 15-minute slots · 1,497 stations. _Last refreshed 2026-11-09 15:18 UTC._
 <!-- /AUTO:STATUS -->
 
 ---
@@ -28,7 +28,7 @@ The operator moves bikes with a small truck fleet, so the real question is:
 **Key findings** (computed automatically from the collected data, refreshed nightly):
 <!-- AUTO:INSIGHTS -->
 > ⚠️ **Less than one week of data.** Treat these numbers as preliminary: weekly patterns and weather effects need several weeks to be reliable.
-1. **Shortages are concentrated.** Across 1,497 stations the network logs **1,171.4 empty-station hours per day**; the worst 20 stations cause **13.8%** of them.
+1. **Shortages are concentrated.** Across 1,497 stations the network logs **1,277.8 empty-station hours per day**; the worst 20 stations cause **13.4%** of them.
 2. **Rush hours drive the problem.** On weekdays the share of empty stations peaks at **11:00** (10.6% of stations, vs 2.4% at the quietest hour); full stations peak at **11:00** (6.3%).
 3. **Morning commute moves bikes one way.** Between 5:00 and 9:00 on weekdays, stations drain in Asnières-sur-Seine (-42%), Gentilly (-33%), Vanves (-30%) and fill up in Paris 8e (+32%), Paris 2e (+29%), Paris 6e (+26%) (change in average fill ratio).
 4. **Rain effect:** not enough rainy and dry slots yet to compare.
@@ -88,13 +88,13 @@ Test period: 2026-11-08 → 2026-11-09 (time-based split).
 
 | Forecast | Persistence MAE | Seasonal MAE | **LightGBM MAE** | Improvement vs persistence |
 |---|---|---|---|---|
-| Bikes in +1h | 1.64 | 5.84 | **1.70** | -4% |
-| Bikes in +2h | 2.52 | 5.88 | **2.57** | -2% |
+| Bikes in +1h | 1.54 | 6.05 | **1.58** | -2% |
+| Bikes in +2h | 2.40 | 6.10 | **2.46** | -3% |
 
 | 2-hour alert | Rule (≤ 2 now) precision / recall | **LightGBM precision / recall** |
 |---|---|---|
-| Station runs empty | 0.49 / 0.76 | **0.78 / 0.50** |
-| Station gets full | 0.48 / 0.71 | **0.73 / 0.51** |
+| Station runs empty | 0.49 / 0.79 | **0.76 / 0.56** |
+| Station gets full | 0.48 / 0.74 | **0.75 / 0.54** |
 
 **What drives the predictions (SHAP):**
 
