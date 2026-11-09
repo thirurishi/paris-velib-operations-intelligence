@@ -10,7 +10,7 @@ What it does
    the period if there are fewer than 14 days). Never a random split, because
    neighbouring 15-min slots are almost identical and would leak.
 3. Trains 4 LightGBM models (one global model across all stations):
-      bikes_1h, bikes_2h     regression: bikes available in 1h / 2h
+      bikes_1h, bikes_2h     regression: change in bikes over 1h / 2h (added to now)
       empty_2h, full_2h      classification: will the station hit 0 bikes / 0 docks
                              at any point in the next 2 hours?
 4. Compares them with baselines that the model must beat:
@@ -111,7 +111,10 @@ def train_models(train: pd.DataFrame) -> dict:
     for target in ("bikes_1h", "bikes_2h"):
         ok = train[target].notna()
         log.info("Training %s on %d rows", target, int(ok.sum()))
-        models[target] = _fit(lgb.LGBMRegressor(objective="l1", **PARAMS), X[ok], train.loc[ok, target])
+        # Learn the CHANGE in bikes (target - now): persistence is then the "zero" the
+        # model starts from, which works better than predicting the level directly.
+        delta = train.loc[ok, target] - train.loc[ok, "bikes_now"]
+        models[target] = _fit(lgb.LGBMRegressor(objective="l1", **PARAMS), X[ok], delta)
     for target in ("empty_2h", "full_2h"):
         ok = train[target].notna()
         y = train.loc[ok, target].astype(int)
@@ -136,8 +139,15 @@ def evaluate(models: dict, test: pd.DataFrame) -> dict:
         y = test.loc[ok, t]
         rows = {
             "Persistence (same as now)": test.loc[ok, "bikes_now"],
-            "Seasonal (same time last week)": seasonal_baseline(test[ok], h),
-            "LightGBM": pd.Series(np.clip(models[t].predict(X[ok]), 0, None), index=y.index),
+            "Seasonal (last week, else yesterday)": seasonal_baseline(test[ok], h),
+            "LightGBM": pd.Series(
+                np.clip(
+                    test.loc[ok, "bikes_now"].to_numpy() + models[t].predict(X[ok]),
+                    0,
+                    test.loc[ok, "usable_capacity"].to_numpy(),
+                ),
+                index=y.index,
+            ),
         }
         base_mae = mean_absolute_error(y, rows["Persistence (same as now)"])
         for name, pred in rows.items():
@@ -280,6 +290,7 @@ def run(make_charts: bool = True) -> dict | None:
         "test_end": str(test["slot_ts"].max()),
         "test_rows": int(len(test)),
         "alert_threshold": ALERT_THRESHOLD,
+        "regression_target": "delta",  # models predict bikes(t+h) - bikes(t)
         "best_iterations": {k: int(m.best_iteration_ or m.n_estimators) for k, m in models.items()},
         "results": results,
     }

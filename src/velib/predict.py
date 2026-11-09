@@ -76,8 +76,10 @@ def predict_latest(
         boosters, _ = models
         X = f[features.FEATURES]
         cap = f["usable_capacity"].to_numpy()
-        f["pred_bikes_1h"] = np.clip(boosters["bikes_1h"].predict(X), 0, cap)
-        f["pred_bikes_2h"] = np.clip(boosters["bikes_2h"].predict(X), 0, cap)
+        # Newer models predict the change in bikes; older ones predicted the level.
+        base = f["bikes_now"].to_numpy() if models[1].get("regression_target") == "delta" else 0
+        f["pred_bikes_1h"] = np.clip(base + boosters["bikes_1h"].predict(X), 0, cap)
+        f["pred_bikes_2h"] = np.clip(base + boosters["bikes_2h"].predict(X), 0, cap)
         f["p_empty_2h"] = boosters["empty_2h"].predict(X)
         f["p_full_2h"] = boosters["full_2h"].predict(X)
         f["method"] = "lightgbm"

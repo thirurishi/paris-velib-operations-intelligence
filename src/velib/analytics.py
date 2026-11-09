@@ -107,10 +107,11 @@ def compute_insights(marts: dict[str, pd.DataFrame]) -> dict:
         "generated_at": datetime.now(UTC).isoformat(timespec="seconds"),
         "days_collected": int(dq["utc_date"].nunique()),
         "snapshots": int(dq["snapshots"].sum()),
-        "first_day": str(dq["utc_date"].min()),
-        "last_day": str(dq["utc_date"].max()),
+        "first_day": str(dq["utc_date"].min())[:10],
+        "last_day": str(dq["utc_date"].max())[:10],
         "stations": int(rel["station_id"].nunique()),
-        "avg_coverage": float(dq["coverage"].clip(upper=1).mean()),
+        # Coverage on complete days only (the first and the current day are partial).
+        "avg_coverage": float((dq["coverage"].iloc[1:-1] if len(dq) > 2 else dq["coverage"]).clip(upper=1).mean()),
     }
 
     # 1. Concentration of empty-station hours
@@ -161,7 +162,7 @@ def render_insights(ins: dict) -> str:
         "",
         f"_Auto-generated from {ins['snapshots']:,} snapshots over {ins['days_collected']} day(s) "
         f"({ins['first_day']} → {ins['last_day']}, average coverage {_pct(ins['avg_coverage'])}). "
-        f"Updated {ins['generated_at']} UTC. Re-run `python -m velib.analytics` to refresh._",
+        f"Updated {ins['generated_at'][:16].replace('T', ' ')} UTC. Re-run `python -m velib.analytics` to refresh._",
         "",
     ]
     if ins["snapshots"] < 96:
