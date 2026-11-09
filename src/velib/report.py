@@ -62,7 +62,9 @@ def model_block(res: dict | None, meta: dict | None) -> str:
         "|---|---|---|---|---|",
     ]
     for h in ("1h", "2h"):
-        p, s, m = (reg[(h, k)] for k in ("Persistence (same as now)", "Seasonal (last week, else yesterday)", "LightGBM"))
+        p, s, m = (
+            reg[(h, k)] for k in ("Persistence (same as now)", "Seasonal (last week, else yesterday)", "LightGBM")
+        )
         lines.append(
             f"| Bikes in +{h} | {p['mae_bikes']:.2f} | {s['mae_bikes']:.2f} | **{m['mae_bikes']:.2f}** | {-m['vs_persistence']:.0%} |"
         )
