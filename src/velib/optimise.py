@@ -311,7 +311,7 @@ def main() -> int:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
     from velib import analytics, predict, storage
 
-    history = storage.read_recent_snapshots(days=8)
+    history = predict.history_for(storage.latest_slot())
     forecast = predict.predict_latest(history, analytics.latest_stations(), predict.load_models())
     cfg = Config()
     tasks = build_tasks(forecast, cfg)

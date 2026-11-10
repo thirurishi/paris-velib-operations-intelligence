@@ -44,6 +44,26 @@ def load_models(models_dir: Path = MODELS_DIR) -> tuple[dict, dict] | None:
     return boosters, meta
 
 
+# Past slots the features need, relative to "now" (see features.build_features).
+LAG_OFFSETS = [
+    pd.Timedelta(0),
+    pd.Timedelta(minutes=15),
+    pd.Timedelta(minutes=30),
+    pd.Timedelta(minutes=60),
+    pd.Timedelta(days=1),
+    pd.Timedelta(hours=23),  # same time yesterday, +1h ahead
+    pd.Timedelta(hours=22),  # same time yesterday, +2h ahead
+    pd.Timedelta(days=7),
+    pd.Timedelta(days=7) - pd.Timedelta(hours=1),
+    pd.Timedelta(days=7) - pd.Timedelta(hours=2),
+]
+
+
+def history_for(now: pd.Timestamp) -> pd.DataFrame:
+    """Only the ~10 snapshots the forecast needs for slot `now` (tiny compared with 8 days)."""
+    return storage.read_slots([now - off for off in LAG_OFFSETS])
+
+
 def risk_level(risk: pd.Series) -> pd.Series:
     return pd.Series(np.select([risk >= RED, risk >= ORANGE], ["red", "orange"], "green"), index=risk.index)
 
@@ -100,7 +120,8 @@ def predict_latest(
 
 def main() -> int:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
-    history = storage.read_recent_snapshots(days=8)
+    now = storage.latest_slot()
+    history = history_for(now) if now is not None else pd.DataFrame()
     if history.empty:
         log.error("No snapshots found.")
         return 1

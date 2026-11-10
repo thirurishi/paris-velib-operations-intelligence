@@ -186,3 +186,55 @@ def read_recent_snapshots(days: int = 8, now: datetime | None = None) -> pd.Data
     if not files:
         return pd.DataFrame(columns=SNAPSHOT_SCHEMA.names)
     return pa.concat_tables([pq.read_table(f, schema=SNAPSHOT_SCHEMA) for f in files]).to_pandas()
+
+
+# ---------------------------------------------------------------------------
+# Light readers for the app (keep memory small on Streamlit Community Cloud)
+# ---------------------------------------------------------------------------
+def _files_for_days(days: set[str]) -> list[Path]:
+    files = []
+    for day in sorted(days):
+        if daily_path(day).exists():
+            files.append(daily_path(day))
+        files += sorted(raw_dir(day).glob("velib_*.parquet"))
+    return files
+
+
+def latest_slot() -> pd.Timestamp | None:
+    """Most recent 15-minute slot stored on disk."""
+    raws = sorted((DATA_DIR / "raw").glob("date=*/velib_*.parquet"))
+    if raws:
+        return pd.Timestamp(raws[-1].stem.removeprefix("velib_").replace("Z", ""), tz="UTC").floor("15min")
+    dailies = sorted((DATA_DIR / "daily").glob("velib_*.parquet"))
+    if dailies:
+        col = pq.read_table(dailies[-1], columns=["slot_ts"]).column("slot_ts")
+        return pd.Timestamp(pa.compute.max(col).as_py()).tz_convert("UTC")
+    return None
+
+
+def read_slots(
+    slots: list[pd.Timestamp],
+    columns: list[str] | None = None,
+    station_id: int | None = None,
+) -> pd.DataFrame:
+    """Read only the given 15-minute slots (and optionally one station), not whole days."""
+    slots = [pd.Timestamp(s).tz_convert("UTC").floor("15min") for s in slots]
+    wanted = {s.to_pydatetime() for s in slots}
+    files = _files_for_days({s.strftime("%Y-%m-%d") for s in slots})
+    if not files:
+        return pd.DataFrame(columns=columns or SNAPSHOT_SCHEMA.names)
+    flt = [("slot_ts", "in", sorted(wanted))]
+    if station_id is not None:
+        flt.append(("station_id", "=", int(station_id)))
+    tables = [pq.read_table(f, columns=columns, filters=flt, schema=SNAPSHOT_SCHEMA) for f in files]
+    return pa.concat_tables(tables).to_pandas()
+
+
+def read_range(
+    start: pd.Timestamp,
+    end: pd.Timestamp,
+    columns: list[str] | None = None,
+    station_id: int | None = None,
+) -> pd.DataFrame:
+    """All slots between start and end (inclusive), optionally for one station."""
+    return read_slots(list(pd.date_range(start.floor("15min"), end.floor("15min"), freq="15min")), columns, station_id)

@@ -21,7 +21,7 @@ import streamlit as st  # noqa: E402
 import streamlit.components.v1 as components  # noqa: E402
 import ui  # noqa: E402
 
-from velib import analytics, collect, features, geo, optimise, predict, storage  # noqa: E402
+from velib import analytics, collect, geo, optimise, predict, storage  # noqa: E402
 
 st.set_page_config(page_title="Vélib' Operations", page_icon="🚲", layout="wide")
 st.markdown(ui.CSS, unsafe_allow_html=True)
@@ -42,17 +42,12 @@ def get_models():
     return predict.load_models()
 
 
-@st.cache_data(ttl=600, show_spinner=False)
-def get_history() -> pd.DataFrame:
-    return storage.read_recent_snapshots(days=8)
-
-
 @st.cache_data(ttl=3600, show_spinner=False)
 def get_stations_saved() -> pd.DataFrame:
     return analytics.latest_stations()
 
 
-@st.cache_data(ttl=300, show_spinner=False)
+@st.cache_data(ttl=300, show_spinner=False, max_entries=1)
 def get_live() -> tuple[pd.DataFrame, pd.DataFrame] | None:
     try:
         snapshot, info, _ = collect.fetch_snapshot()
@@ -62,16 +57,33 @@ def get_live() -> tuple[pd.DataFrame, pd.DataFrame] | None:
     return snapshot, geo.add_area(info)
 
 
-@st.cache_data(ttl=300, show_spinner=False)
-def get_forecast(use_live: bool) -> tuple[pd.DataFrame, pd.DataFrame, bool]:
-    history, stations, live = get_history(), get_stations_saved(), False
-    if use_live and (fetched := get_live()) is not None:
+@st.cache_data(ttl=300, show_spinner=False, max_entries=2)
+def get_forecast(use_live: bool) -> tuple[pd.DataFrame, bool]:
+    """Forecast for every station. Reads only the ~10 past snapshots the model needs."""
+    stations, live = get_stations_saved(), False
+    fetched = get_live() if use_live else None
+    if fetched is not None:
         snapshot, stations = fetched
-        history, live = pd.concat([history, snapshot], ignore_index=True), True
-    return predict.predict_latest(history, stations, get_models()), history, live
+        now, live = snapshot["slot_ts"].max(), True
+        history = pd.concat([predict.history_for(now), snapshot], ignore_index=True)
+    else:
+        now = storage.latest_slot()
+        if now is None:
+            raise FileNotFoundError("No snapshots stored yet.")
+        history = predict.history_for(now)
+    return predict.predict_latest(history, stations, get_models()), live
 
 
-@st.cache_data(ttl=300, show_spinner=False)
+@st.cache_data(ttl=300, show_spinner=False, max_entries=20)
+def get_station_series(station_id: int, now: pd.Timestamp) -> pd.DataFrame:
+    """Last 24 h and the same window one week ago, for one station only."""
+    cols = ["slot_ts", "station_id", "bikes_total"]
+    past = storage.read_range(now - pd.Timedelta(hours=24), now, cols, station_id)
+    week = storage.read_range(now - pd.Timedelta(days=8), now - pd.Timedelta(days=7, hours=-2), cols, station_id)
+    return pd.concat([past.assign(series="Observed"), week.assign(series="Same time last week")], ignore_index=True)
+
+
+@st.cache_data(ttl=300, show_spinner=False, max_entries=8)
 def get_plan(_forecast: pd.DataFrame, key: str, cfg_items: tuple) -> tuple[pd.DataFrame, dict, pd.DataFrame]:
     return optimise.plan(_forecast, optimise.Config(**dict(cfg_items)))
 
@@ -117,7 +129,7 @@ cfg = optimise.Config(**dict(cfg_items))
 # ---------------------------------------------------------------------------
 try:
     with st.spinner("Loading stations and forecasts"):
-        forecast, history, live = get_forecast(use_live)
+        forecast, live = get_forecast(use_live)
 except FileNotFoundError:
     st.error("No collected data yet. Run `python -m velib.collect` once, then reload.")
     st.stop()
@@ -229,11 +241,10 @@ with tab_station:
     )
 
     now = forecast["slot_ts"].max()
-    h = features.prepare(history)
-    h = h[h["station_id"] == row["station_id"]]
-    past = h[h["slot_ts"] >= now - pd.Timedelta(hours=24)].assign(series="Observed")
-    week = h[(h["slot_ts"] >= now - pd.Timedelta(days=8)) & (h["slot_ts"] <= now - pd.Timedelta(days=7, hours=-2))]
-    week = week.assign(slot_ts=week["slot_ts"] + pd.Timedelta(days=7), series="Same time last week")
+    series = get_station_series(int(row["station_id"]), now)
+    past = series[series["series"] == "Observed"]
+    week = series[series["series"] == "Same time last week"]
+    week = week.assign(slot_ts=week["slot_ts"] + pd.Timedelta(days=7))
     fc = pd.DataFrame(
         {
             "slot_ts": [now, now + pd.Timedelta(hours=1), now + pd.Timedelta(hours=2)],
@@ -242,7 +253,8 @@ with tab_station:
         }
     )
     df = pd.concat([past, week, fc])[["slot_ts", "bikes_total", "series"]]
-    df["time"] = df["slot_ts"].dt.tz_convert("Europe/Paris").dt.tz_localize(None)
+    df = df.dropna(subset=["bikes_total"])
+    df["time"] = pd.to_datetime(df["slot_ts"], utc=True).dt.tz_convert("Europe/Paris").dt.tz_localize(None)
     order = ["Observed", "Forecast", "Same time last week"]
     base = alt.Chart(df).encode(
         x=alt.X("time:T", title=None, axis=alt.Axis(format="%a %H:%M", labelColor=ui.MUTED, grid=False)),
