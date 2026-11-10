@@ -13,7 +13,7 @@
 
 **Data collected so far:**
 <!-- AUTO:STATUS -->
-**5 days** collected (2026-11-05 → 2026-11-09) · **305 snapshots** · ~**456,585** station records · average coverage **84%** of 15-minute slots · 1,497 stations. _Last refreshed 2026-11-09 15:18 UTC._
+**6 days** collected (2026-11-05 → 2026-11-10) · **386 snapshots** · ~**577,842** station records · average coverage **88%** of 15-minute slots · 1,497 stations. _Last refreshed 2026-11-10 11:45 UTC._
 <!-- /AUTO:STATUS -->
 
 ---
@@ -28,10 +28,10 @@ The operator moves bikes with a small truck fleet, so the real question is:
 **Key findings** (computed automatically from the collected data, refreshed nightly):
 <!-- AUTO:INSIGHTS -->
 > ⚠️ **Less than one week of data.** Treat these numbers as preliminary: weekly patterns and weather effects need several weeks to be reliable.
-1. **Shortages are concentrated.** Across 1,497 stations the network logs **1,277.8 empty-station hours per day**; the worst 20 stations cause **13.4%** of them.
-2. **Rush hours drive the problem.** On weekdays the share of empty stations peaks at **11:00** (10.6% of stations, vs 2.4% at the quietest hour); full stations peak at **11:00** (6.3%).
-3. **Morning commute moves bikes one way.** Between 5:00 and 9:00 on weekdays, stations drain in Asnières-sur-Seine (-42%), Gentilly (-33%), Vanves (-30%) and fill up in Paris 8e (+32%), Paris 2e (+29%), Paris 6e (+26%) (change in average fill ratio).
-4. **Rain effect:** not enough rainy and dry slots yet to compare.
+1. **Shortages are concentrated.** Across 1,497 stations the network logs **1,289.8 empty-station hours per day**; the worst 20 stations cause **13.1%** of them.
+2. **Rush hours drive the problem.** On weekdays the share of empty stations peaks at **11:00** (9.4% of stations, vs 2.4% at the quietest hour); full stations peak at **10:00** (5.0%).
+3. **Morning commute moves bikes one way.** Between 5:00 and 9:00 on weekdays, stations drain in Asnières-sur-Seine (-38%), Vanves (-25%), Gentilly (-24%) and fill up in Paris 8e (+32%), Paris 2e (+30%), Paris 6e (+23%) (change in average fill ratio).
+4. **Rain cuts usage.** Weekday daytime activity is **-1%** in rainy slots compared with dry ones.
 
 Full list of the worst stations: [`reports/insights.md`](reports/insights.md).
 <!-- /AUTO:INSIGHTS -->
