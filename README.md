@@ -13,7 +13,7 @@
 
 **Data collected so far:**
 <!-- AUTO:STATUS -->
-**10 days** collected (2026-11-05 → 2026-11-14) · **770 snapshots** · ~**1.2 million** station records · average coverage **94%** of 15-minute slots · 1,497 stations. _Last refreshed 2026-11-14 10:55 UTC._
+**11 days** collected (2026-11-05 → 2026-11-15) · **868 snapshots** · ~**1.3 million** station records · average coverage **95%** of 15-minute slots · 1,498 stations. _Last refreshed 2026-11-15 11:29 UTC._
 <!-- /AUTO:STATUS -->
 
 ---
@@ -27,7 +27,7 @@ The operator moves bikes with a small truck fleet, so the real question is:
 
 **Key findings** (computed automatically from the collected data, refreshed nightly):
 <!-- AUTO:INSIGHTS -->
-1. **Shortages are concentrated.** Across 1,497 stations the network logs **1,366.6 empty-station hours per day**; the worst 20 stations cause **11.6%** of them.
+1. **Shortages are concentrated.** Across 1,498 stations the network logs **1,388.1 empty-station hours per day**; the worst 20 stations cause **11.5%** of them.
 2. **Rush hours drive the problem.** On weekdays the share of empty stations peaks at **11:00** (7.9% of stations, vs 2.1% at the quietest hour); full stations peak at **11:00** (4.4%).
 3. **Morning commute moves bikes one way.** Between 5:00 and 9:00 on weekdays, stations drain in Asnières-sur-Seine (-32%), Malakoff (-20%), Lilas (-19%) and fill up in Paris 2e (+26%), Paris 8e (+24%), Paris 6e (+20%) (change in average fill ratio).
 4. **Rain cuts usage.** Weekday daytime activity is **-3%** in rainy slots compared with dry ones.
