@@ -1,10 +1,32 @@
 {
-  "name": "Velib Ops",
-  "dataColors": ["#2a6f97", "#d62728", "#f28e2b", "#2e9e5b", "#7a5195", "#adb5bd", "#61a5c2", "#ef5675"],
+  "name": "Velib Ops Minimal",
+  "dataColors": ["#d7263d", "#1f6feb", "#1c1c1c", "#a3a3a3", "#6b6b6b", "#f2a7b0", "#a9c7f7", "#d4d4d4"],
   "background": "#FFFFFF",
-  "foreground": "#1d2b36",
-  "tableAccent": "#2a6f97",
-  "good": "#2e9e5b",
-  "neutral": "#f28e2b",
-  "bad": "#d62728"
+  "foreground": "#1c1c1c",
+  "tableAccent": "#1c1c1c",
+  "good": "#1f6feb",
+  "neutral": "#a3a3a3",
+  "bad": "#d7263d",
+  "maximum": "#d7263d",
+  "center": "#f6f6f5",
+  "minimum": "#ffffff",
+  "textClasses": {
+    "title": { "fontFace": "Segoe UI Semibold", "fontSize": 12, "color": "#1c1c1c" },
+    "header": { "fontFace": "Segoe UI Semibold", "fontSize": 12, "color": "#1c1c1c" },
+    "label": { "fontFace": "Segoe UI", "fontSize": 10, "color": "#6b6b6b" },
+    "callout": { "fontFace": "Segoe UI Semibold", "fontSize": 28, "color": "#1c1c1c" }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [{ "show": false }],
+        "border": [{ "show": false }],
+        "dropShadow": [{ "show": false }],
+        "visualHeader": [{ "show": false }],
+        "title": [{ "fontColor": { "solid": { "color": "#1c1c1c" } }, "fontSize": 12 }],
+        "gridlines": [{ "show": true }]
+      }
+    },
+    "page": { "*": { "background": [{ "color": { "solid": { "color": "#FFFFFF" } }, "transparency": 0 }] } }
+  }
 }
