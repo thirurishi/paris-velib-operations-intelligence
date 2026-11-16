@@ -222,21 +222,25 @@ def write_reports(ins: dict) -> None:
     (REPORTS_DIR / "insights.json").write_text(json.dumps(ins, indent=2, default=str), encoding="utf-8")
 
 
-def run() -> dict:
+def run(reports: bool = True) -> dict:
     con = connect()
     stations = con.table("stations").df()
     marts = build_marts(con)
     export_marts(marts, stations)
     ins = compute_insights(marts)
-    write_reports(ins)
-    log.info("Insights written to %s", REPORTS_DIR / "insights.md")
+    if reports:
+        write_reports(ins)
+        log.info("Insights written to %s", REPORTS_DIR / "insights.md")
     return ins
 
 
 def main() -> int:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+    # Reports (reports/*.md, *.json) are committed by the nightly build, which passes
+    # --reports. A plain local run only refreshes data/marts/ for Power BI, so your
+    # working copy stays clean and `git pull` keeps working.
     try:
-        run()
+        run(reports="--reports" in sys.argv)
     except Exception:  # noqa: BLE001
         log.exception("Analytics failed")
         return 1

@@ -37,7 +37,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Analytics + insights (Phase 2)
-        run: python -m velib.analytics
+        run: python -m velib.analytics --reports
 
       - name: Train model (Phase 3) on Mondays, on request, or if none exists yet
         run: |

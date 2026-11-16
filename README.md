@@ -123,7 +123,7 @@ export PYTHONPATH=src                     # Windows PowerShell: $env:PYTHONPATH=
 
 python -m velib.collect                   # collect one snapshot now
 python -m velib.check_data                # data-quality report
-python -m velib.analytics                 # DuckDB marts + reports/insights.md
+python -m velib.analytics                 # DuckDB marts (add --reports to rewrite reports/)
 python -m velib.train                     # train + evaluate (needs ≥ 3 days of data)
 python -m velib.predict                   # riskiest stations right now
 python -m velib.optimise                  # truck plan + strategy comparison
