@@ -13,7 +13,7 @@
 
 **Data collected so far:**
 <!-- AUTO:STATUS -->
-**14 days** collected (2026-11-05 → 2026-11-18) · **1,114 snapshots** · ~**1.7 million** station records · average coverage **92%** of 15-minute slots · 1,500 stations. _Last refreshed 2026-11-18 12:14 UTC._
+**15 days** collected (2026-11-05 → 2026-11-19) · **1,210 snapshots** · ~**1.8 million** station records · average coverage **93%** of 15-minute slots · 1,501 stations. _Last refreshed 2026-11-19 12:08 UTC._
 <!-- /AUTO:STATUS -->
 
 ---
@@ -27,10 +27,10 @@ The operator moves bikes with a small truck fleet, so the real question is:
 
 **Key findings** (computed automatically from the collected data, refreshed nightly):
 <!-- AUTO:INSIGHTS -->
-1. **Shortages are concentrated.** Across 1,500 stations the network logs **1,443.6 empty-station hours per day**; the worst 20 stations cause **10.9%** of them.
-2. **Rush hours drive the problem.** On weekdays the share of empty stations peaks at **11:00** (8.3% of stations, vs 2.4% at the quietest hour); full stations peak at **11:00** (4.8%).
-3. **Morning commute moves bikes one way.** Between 5:00 and 9:00 on weekdays, stations drain in Asnières-sur-Seine (-33%), Vanves (-20%), Clichy (-19%) and fill up in Paris 2e (+27%), Paris 8e (+25%), Paris 1er (+20%) (change in average fill ratio).
-4. **Rain cuts usage.** Weekday daytime activity is **+2%** in rainy slots compared with dry ones.
+1. **Shortages are concentrated.** Across 1,501 stations the network logs **1,471.8 empty-station hours per day**; the worst 20 stations cause **10.9%** of them.
+2. **Rush hours drive the problem.** On weekdays the share of empty stations peaks at **10:00** (8.4% of stations, vs 2.5% at the quietest hour); full stations peak at **11:00** (4.8%).
+3. **Morning commute moves bikes one way.** Between 5:00 and 9:00 on weekdays, stations drain in Asnières-sur-Seine (-34%), Vanves (-21%), Lilas (-21%) and fill up in Paris 2e (+29%), Paris 8e (+26%), Paris 1er (+22%) (change in average fill ratio).
+4. **Rain cuts usage.** Weekday daytime activity is **+1%** in rainy slots compared with dry ones.
 
 Full list of the worst stations: [`reports/insights.md`](reports/insights.md).
 <!-- /AUTO:INSIGHTS -->
