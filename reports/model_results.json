@@ -3,76 +3,76 @@
     {
       "horizon": "1h",
       "method": "Persistence (same as now)",
-      "mae_bikes": 1.675,
+      "mae_bikes": 1.692,
       "vs_persistence": 0.0
     },
     {
       "horizon": "1h",
       "method": "Seasonal (last week, else yesterday)",
-      "mae_bikes": 6.097,
-      "vs_persistence": 2.641
+      "mae_bikes": 6.115,
+      "vs_persistence": 2.613
     },
     {
       "horizon": "1h",
       "method": "LightGBM",
-      "mae_bikes": 1.612,
-      "vs_persistence": -0.037
+      "mae_bikes": 1.6,
+      "vs_persistence": -0.054
     },
     {
       "horizon": "2h",
       "method": "Persistence (same as now)",
-      "mae_bikes": 2.512,
+      "mae_bikes": 2.615,
       "vs_persistence": 0.0
     },
     {
       "horizon": "2h",
       "method": "Seasonal (last week, else yesterday)",
-      "mae_bikes": 6.103,
-      "vs_persistence": 1.43
+      "mae_bikes": 6.114,
+      "vs_persistence": 1.338
     },
     {
       "horizon": "2h",
       "method": "LightGBM",
-      "mae_bikes": 2.314,
-      "vs_persistence": -0.079
+      "mae_bikes": 2.307,
+      "vs_persistence": -0.118
     }
   ],
   "alerts": [
     {
       "event": "empty_2h",
       "method": "Rule: <= 2 now",
-      "base_rate": 0.1057,
-      "precision": 0.482,
-      "recall": 0.771,
-      "avg_precision": 0.396,
-      "alerts_per_slot": 250.6
+      "base_rate": 0.1067,
+      "precision": 0.477,
+      "recall": 0.765,
+      "avg_precision": 0.39,
+      "alerts_per_slot": 255.2
     },
     {
       "event": "empty_2h",
       "method": "LightGBM",
-      "base_rate": 0.1057,
-      "precision": 0.756,
-      "recall": 0.547,
-      "avg_precision": 0.746,
-      "alerts_per_slot": 113.4
+      "base_rate": 0.1067,
+      "precision": 0.776,
+      "recall": 0.541,
+      "avg_precision": 0.748,
+      "alerts_per_slot": 111.0
     },
     {
       "event": "full_2h",
       "method": "Rule: <= 2 now",
-      "base_rate": 0.0601,
-      "precision": 0.502,
-      "recall": 0.697,
-      "avg_precision": 0.368,
-      "alerts_per_slot": 123.8
+      "base_rate": 0.0616,
+      "precision": 0.5,
+      "recall": 0.723,
+      "avg_precision": 0.379,
+      "alerts_per_slot": 133.1
     },
     {
       "event": "full_2h",
       "method": "LightGBM",
-      "base_rate": 0.0601,
-      "precision": 0.808,
-      "recall": 0.48,
-      "avg_precision": 0.723,
-      "alerts_per_slot": 52.9
+      "base_rate": 0.0616,
+      "precision": 0.746,
+      "recall": 0.596,
+      "avg_precision": 0.746,
+      "alerts_per_slot": 73.5
     }
   ]
 }

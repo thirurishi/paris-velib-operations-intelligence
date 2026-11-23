@@ -13,7 +13,7 @@
 
 **Data collected so far:**
 <!-- AUTO:STATUS -->
-**18 days** collected (2026-11-05 → 2026-11-22) · **1,461 snapshots** · ~**2.2 million** station records · average coverage **92%** of 15-minute slots · 1,502 stations. _Last refreshed 2026-11-22 11:58 UTC._
+**19 days** collected (2026-11-05 → 2026-11-23) · **1,564 snapshots** · ~**2.3 million** station records · average coverage **92%** of 15-minute slots · 1,502 stations. _Last refreshed 2026-11-23 13:38 UTC._
 <!-- /AUTO:STATUS -->
 
 ---
@@ -27,9 +27,9 @@ The operator moves bikes with a small truck fleet, so the real question is:
 
 **Key findings** (computed automatically from the collected data, refreshed nightly):
 <!-- AUTO:INSIGHTS -->
-1. **Shortages are concentrated.** Across 1,502 stations the network logs **1,438.8 empty-station hours per day**; the worst 20 stations cause **10.8%** of them.
-2. **Rush hours drive the problem.** On weekdays the share of empty stations peaks at **10:00** (8.4% of stations, vs 2.4% at the quietest hour); full stations peak at **11:00** (4.8%).
-3. **Morning commute moves bikes one way.** Between 5:00 and 9:00 on weekdays, stations drain in Asnières-sur-Seine (-33%), Vanves (-21%), Lilas (-21%) and fill up in Paris 2e (+29%), Paris 8e (+26%), Paris 1er (+22%) (change in average fill ratio).
+1. **Shortages are concentrated.** Across 1,502 stations the network logs **1,458.7 empty-station hours per day**; the worst 20 stations cause **10.7%** of them.
+2. **Rush hours drive the problem.** On weekdays the share of empty stations peaks at **10:00** (8.7% of stations, vs 2.4% at the quietest hour); full stations peak at **11:00** (4.9%).
+3. **Morning commute moves bikes one way.** Between 5:00 and 9:00 on weekdays, stations drain in Asnières-sur-Seine (-34%), Lilas (-21%), Vanves (-21%) and fill up in Paris 2e (+29%), Paris 8e (+26%), Paris 1er (+21%) (change in average fill ratio).
 4. **Rain cuts usage.** Weekday daytime activity is **-1%** in rainy slots compared with dry ones.
 
 Full list of the worst stations: [`reports/insights.md`](reports/insights.md).
@@ -83,17 +83,17 @@ rather than silently dropped. Data health is tracked in `mart_data_quality` and 
   "≤ 2 bikes now" alert rule. Retrained every Monday by the nightly build.
 
 <!-- AUTO:MODEL -->
-Test period: 2026-11-13 → 2026-11-16 (time-based split).
+Test period: 2026-11-16 → 2026-11-23 (time-based split).
 
 | Forecast | Persistence MAE | Seasonal MAE | **LightGBM MAE** | Improvement vs persistence |
 |---|---|---|---|---|
-| Bikes in +1h | 1.68 | 6.10 | **1.61** | 4% |
-| Bikes in +2h | 2.51 | 6.10 | **2.31** | 8% |
+| Bikes in +1h | 1.69 | 6.12 | **1.60** | 5% |
+| Bikes in +2h | 2.62 | 6.11 | **2.31** | 12% |
 
 | 2-hour alert | Rule (≤ 2 now) precision / recall | **LightGBM precision / recall** |
 |---|---|---|
-| Station runs empty | 0.48 / 0.77 | **0.76 / 0.55** |
-| Station gets full | 0.50 / 0.70 | **0.81 / 0.48** |
+| Station runs empty | 0.48 / 0.77 | **0.78 / 0.54** |
+| Station gets full | 0.50 / 0.72 | **0.75 / 0.60** |
 
 **What drives the predictions (SHAP):**
 
