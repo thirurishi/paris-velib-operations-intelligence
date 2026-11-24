@@ -1,19 +1,19 @@
 {
-  "generated_at": "2026-11-23T13:38:58+00:00",
-  "days_collected": 19,
-  "snapshots": 1564,
+  "generated_at": "2026-11-24T14:16:25+00:00",
+  "days_collected": 20,
+  "snapshots": 1662,
   "first_day": "2026-11-05",
-  "last_day": "2026-11-23",
+  "last_day": "2026-11-24",
   "stations": 1502,
-  "avg_coverage": 0.9221764705882353,
-  "empty_station_hours_per_day": 1458.7,
-  "top20_share_of_empty_hours": 0.10687059533276662,
+  "avg_coverage": 0.9265,
+  "empty_station_hours_per_day": 1479.2,
+  "top20_share_of_empty_hours": 0.10742293131422391,
   "top20_empty_stations": [
     {
       "station_code": "32305",
       "name": "Saint-Germain - Verdun",
       "area": "Romainville",
-      "empty_hours_per_day": 21.67
+      "empty_hours_per_day": 21.82
     },
     {
       "station_code": "5110",
@@ -25,266 +25,266 @@
       "station_code": "20029",
       "name": "Fr\u00e8res Flavien - Porte des Lilas",
       "area": "Lilas",
-      "empty_hours_per_day": 8.24
+      "empty_hours_per_day": 8.67
     },
     {
       "station_code": "20205",
       "name": "Haxo - Darcy",
       "area": "Paris 20e",
-      "empty_hours_per_day": 6.89
-    },
-    {
-      "station_code": "20035",
-      "name": "Pyr\u00e9n\u00e9es - M\u00e9nilmontant",
-      "area": "Paris 20e",
-      "empty_hours_per_day": 6.79
-    },
-    {
-      "station_code": "19038",
-      "name": "Lassus - Delouvain",
-      "area": "Paris 19e",
-      "empty_hours_per_day": 6.78
-    },
-    {
-      "station_code": "20027",
-      "name": "Porte de M\u00e9nilmontant",
-      "area": "Paris 20e",
-      "empty_hours_per_day": 6.68
-    },
-    {
-      "station_code": "20117",
-      "name": "Saint-Fargeau - Mortier",
-      "area": "Paris 20e",
-      "empty_hours_per_day": 6.67
+      "empty_hours_per_day": 7.09
     },
     {
       "station_code": "20110",
       "name": "Gambetta - Tourelles",
       "area": "Paris 20e",
-      "empty_hours_per_day": 6.57
+      "empty_hours_per_day": 6.99
     },
     {
-      "station_code": "20137",
-      "name": "Borr\u00e9go - Gambetta",
+      "station_code": "20035",
+      "name": "Pyr\u00e9n\u00e9es - M\u00e9nilmontant",
       "area": "Paris 20e",
-      "empty_hours_per_day": 6.43
+      "empty_hours_per_day": 6.96
     },
     {
-      "station_code": "20119",
-      "name": "Square des Saint-Simoniens",
+      "station_code": "20117",
+      "name": "Saint-Fargeau - Mortier",
       "area": "Paris 20e",
-      "empty_hours_per_day": 6.32
+      "empty_hours_per_day": 6.89
+    },
+    {
+      "station_code": "20027",
+      "name": "Porte de M\u00e9nilmontant",
+      "area": "Paris 20e",
+      "empty_hours_per_day": 6.63
+    },
+    {
+      "station_code": "19038",
+      "name": "Lassus - Delouvain",
+      "area": "Paris 19e",
+      "empty_hours_per_day": 6.62
     },
     {
       "station_code": "20019",
       "name": "Place du Maquis du Vercors",
       "area": "Paris 20e",
-      "empty_hours_per_day": 6.24
+      "empty_hours_per_day": 6.61
+    },
+    {
+      "station_code": "20137",
+      "name": "Borr\u00e9go - Gambetta",
+      "area": "Paris 20e",
+      "empty_hours_per_day": 6.51
     },
     {
       "station_code": "20103",
       "name": "Le Vau - Maurice Bertaux",
       "area": "Paris 20e",
-      "empty_hours_per_day": 6.1
+      "empty_hours_per_day": 6.5
     },
     {
-      "station_code": "19040",
-      "name": "Belleville - T\u00e9l\u00e9graphe",
-      "area": "Paris 19e",
-      "empty_hours_per_day": 6.06
+      "station_code": "20119",
+      "name": "Square des Saint-Simoniens",
+      "area": "Paris 20e",
+      "empty_hours_per_day": 6.41
     },
     {
       "station_code": "19208",
       "name": "S\u00e9rurier - Alphonse Aulard",
       "area": "Paris 19e",
-      "empty_hours_per_day": 5.67
+      "empty_hours_per_day": 5.87
     },
     {
-      "station_code": "20036",
-      "name": "M\u00e9nilmontant - Pelleport",
-      "area": "Paris 20e",
-      "empty_hours_per_day": 5.63
-    },
-    {
-      "station_code": "18114",
-      "name": "V\u00e9ron - Lepic",
-      "area": "Paris 18e",
-      "empty_hours_per_day": 5.58
-    },
-    {
-      "station_code": "18208",
-      "name": "Tourlaque - Damr\u00e9mont",
-      "area": "Paris 18e",
-      "empty_hours_per_day": 5.57
+      "station_code": "19040",
+      "name": "Belleville - T\u00e9l\u00e9graphe",
+      "area": "Paris 19e",
+      "empty_hours_per_day": 5.87
     },
     {
       "station_code": "19121",
       "name": "Belleville -  Pr\u00e9 Saint-Gervais",
       "area": "Paris 19e",
-      "empty_hours_per_day": 5.56
+      "empty_hours_per_day": 5.86
     },
     {
-      "station_code": "31702",
-      "name": "Pierre et Marie Curie - Julien Grimau",
-      "area": "Bagnolet",
-      "empty_hours_per_day": 5.5
+      "station_code": "20036",
+      "name": "M\u00e9nilmontant - Pelleport",
+      "area": "Paris 20e",
+      "empty_hours_per_day": 5.82
+    },
+    {
+      "station_code": "18114",
+      "name": "V\u00e9ron - Lepic",
+      "area": "Paris 18e",
+      "empty_hours_per_day": 5.64
+    },
+    {
+      "station_code": "18208",
+      "name": "Tourlaque - Damr\u00e9mont",
+      "area": "Paris 18e",
+      "empty_hours_per_day": 5.61
+    },
+    {
+      "station_code": "20037",
+      "name": "Gambetta - Saint Fargeau",
+      "area": "Paris 20e",
+      "empty_hours_per_day": 5.59
     }
   ],
-  "full_station_hours_per_day": 847.5,
+  "full_station_hours_per_day": 864.3,
   "top20_full_stations": [
-    {
-      "station_code": "92008",
-      "name": "H\u00f4tel de Ville de Nanterre",
-      "area": "Nanterre",
-      "full_hours_per_day": 4.53
-    },
     {
       "station_code": "26010",
       "name": "Louis Armand - Bernard Palissy",
       "area": "Asni\u00e8res-sur-Seine",
-      "full_hours_per_day": 4.51
-    },
-    {
-      "station_code": "44004",
-      "name": "Place de l'Eglise - Vitry-sur-Seine",
-      "area": "Vitry-sur-Seine",
-      "full_hours_per_day": 4.31
+      "full_hours_per_day": 4.54
     },
     {
       "station_code": "40013",
       "name": "H\u00f4tel de Ville de Cr\u00e9teil",
       "area": "Cr\u00e9teil",
-      "full_hours_per_day": 4.28
+      "full_hours_per_day": 4.47
+    },
+    {
+      "station_code": "92008",
+      "name": "H\u00f4tel de Ville de Nanterre",
+      "area": "Nanterre",
+      "full_hours_per_day": 4.36
+    },
+    {
+      "station_code": "44004",
+      "name": "Place de l'Eglise - Vitry-sur-Seine",
+      "area": "Vitry-sur-Seine",
+      "full_hours_per_day": 4.08
     },
     {
       "station_code": "4201",
       "name": "Quai des C\u00e9lestins - Henri IV",
       "area": "Paris 4e",
-      "full_hours_per_day": 4.14
-    },
-    {
-      "station_code": "3201",
-      "name": "Payenne - Square George Ca\u00efn",
-      "area": "Paris 3e",
-      "full_hours_per_day": 4.11
-    },
-    {
-      "station_code": "16116",
-      "name": "George Sand - Jean de La Fontaine",
-      "area": "Paris 16e",
-      "full_hours_per_day": 4.1
+      "full_hours_per_day": 4.04
     },
     {
       "station_code": "4109",
       "name": "Mornay - Sully",
       "area": "Paris 4e",
-      "full_hours_per_day": 3.92
+      "full_hours_per_day": 3.91
     },
     {
-      "station_code": "1018",
-      "name": "Alger - Rivoli",
-      "area": "Paris 1er",
-      "full_hours_per_day": 3.83
+      "station_code": "3201",
+      "name": "Payenne - Square George Ca\u00efn",
+      "area": "Paris 3e",
+      "full_hours_per_day": 3.89
     },
     {
-      "station_code": "6016",
-      "name": "Danton - Serpente",
-      "area": "Paris 6e",
-      "full_hours_per_day": 3.74
+      "station_code": "16116",
+      "name": "George Sand - Jean de La Fontaine",
+      "area": "Paris 16e",
+      "full_hours_per_day": 3.88
     },
     {
       "station_code": "6107",
       "name": "Place Alphonse Deville",
       "area": "Paris 6e",
-      "full_hours_per_day": 3.69
-    },
-    {
-      "station_code": "1025",
-      "name": "Oratoire - Rivoli",
-      "area": "Paris 1er",
-      "full_hours_per_day": 3.69
-    },
-    {
-      "station_code": "23007",
-      "name": "Pr\u00e9sident Wilson - Jean Jaures",
-      "area": "Levallois-Perret",
-      "full_hours_per_day": 3.68
-    },
-    {
-      "station_code": "42004",
-      "name": "Westermeyer - Paul Vaillant-Couturier",
-      "area": "Ivry-sur-Seine",
-      "full_hours_per_day": 3.68
-    },
-    {
-      "station_code": "13104",
-      "name": "Gare d'Austerlitz - Quai Saint-Bernard",
-      "area": "Paris 13e",
-      "full_hours_per_day": 3.63
+      "full_hours_per_day": 3.84
     },
     {
       "station_code": "12027",
       "name": "Montgallet - Charenton",
       "area": "Paris 12e",
-      "full_hours_per_day": 3.56
+      "full_hours_per_day": 3.82
+    },
+    {
+      "station_code": "6016",
+      "name": "Danton - Serpente",
+      "area": "Paris 6e",
+      "full_hours_per_day": 3.79
     },
     {
       "station_code": "1012",
       "name": "Jean-Jacques Rousseau - Deux Ecus",
       "area": "Paris 1er",
-      "full_hours_per_day": 3.47
+      "full_hours_per_day": 3.75
     },
     {
-      "station_code": "44003",
-      "name": "Gabriel P\u00e9ri - Danielle Casanova",
-      "area": "Vitry-sur-Seine",
-      "full_hours_per_day": 3.44
+      "station_code": "1018",
+      "name": "Alger - Rivoli",
+      "area": "Paris 1er",
+      "full_hours_per_day": 3.75
     },
     {
-      "station_code": "42501",
-      "name": "Raspail - Albert Schweitzer",
-      "area": "Gentilly",
-      "full_hours_per_day": 3.4
+      "station_code": "1025",
+      "name": "Oratoire - Rivoli",
+      "area": "Paris 1er",
+      "full_hours_per_day": 3.74
     },
     {
-      "station_code": "41402",
-      "name": "Victor Hugo - Ecoles",
-      "area": "Alfortville",
-      "full_hours_per_day": 3.39
+      "station_code": "6021",
+      "name": "Beaux-Arts - Bonaparte",
+      "area": "Paris 6e",
+      "full_hours_per_day": 3.71
+    },
+    {
+      "station_code": "23007",
+      "name": "Pr\u00e9sident Wilson - Jean Jaures",
+      "area": "Levallois-Perret",
+      "full_hours_per_day": 3.67
+    },
+    {
+      "station_code": "13104",
+      "name": "Gare d'Austerlitz - Quai Saint-Bernard",
+      "area": "Paris 13e",
+      "full_hours_per_day": 3.64
+    },
+    {
+      "station_code": "42004",
+      "name": "Westermeyer - Paul Vaillant-Couturier",
+      "area": "Ivry-sur-Seine",
+      "full_hours_per_day": 3.49
+    },
+    {
+      "station_code": "15042",
+      "name": "Henry Farman",
+      "area": "Paris 15e",
+      "full_hours_per_day": 3.46
+    },
+    {
+      "station_code": "2002",
+      "name": "Etienne Marcel - Montorgueil",
+      "area": "Paris 2e",
+      "full_hours_per_day": 3.43
     }
   ],
   "weekday_peak_empty_hour": 10,
-  "weekday_peak_empty_share": 0.0867,
+  "weekday_peak_empty_share": 0.0864,
   "weekday_peak_full_hour": 11,
-  "weekday_peak_full_share": 0.0492,
-  "weekday_min_empty_share": 0.0236,
+  "weekday_peak_full_share": 0.051,
+  "weekday_min_empty_share": 0.0238,
   "areas_draining_am": [
     {
       "area": "Asni\u00e8res-sur-Seine",
-      "am_change": -0.33599999999999997
+      "am_change": -0.344
     },
     {
       "area": "Lilas",
-      "am_change": -0.21
+      "am_change": -0.211
     },
     {
       "area": "Vanves",
-      "am_change": -0.20599999999999996
+      "am_change": -0.20799999999999996
     }
   ],
   "areas_filling_am": [
     {
       "area": "Paris 2e",
-      "am_change": 0.2929999999999999
+      "am_change": 0.30199999999999994
     },
     {
       "area": "Paris 8e",
-      "am_change": 0.258
+      "am_change": 0.265
     },
     {
       "area": "Paris 1er",
-      "am_change": 0.21300000000000002
+      "am_change": 0.21800000000000003
     }
   ],
-  "rain_activity_change": -0.007450130679597877
+  "rain_activity_change": -0.008504419996254176
 }

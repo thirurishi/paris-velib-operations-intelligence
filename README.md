@@ -13,7 +13,7 @@
 
 **Data collected so far:**
 <!-- AUTO:STATUS -->
-**19 days** collected (2026-11-05 → 2026-11-23) · **1,564 snapshots** · ~**2.3 million** station records · average coverage **92%** of 15-minute slots · 1,502 stations. _Last refreshed 2026-11-23 13:38 UTC._
+**20 days** collected (2026-11-05 → 2026-11-24) · **1,662 snapshots** · ~**2.5 million** station records · average coverage **93%** of 15-minute slots · 1,502 stations. _Last refreshed 2026-11-24 14:16 UTC._
 <!-- /AUTO:STATUS -->
 
 ---
@@ -27,9 +27,9 @@ The operator moves bikes with a small truck fleet, so the real question is:
 
 **Key findings** (computed automatically from the collected data, refreshed nightly):
 <!-- AUTO:INSIGHTS -->
-1. **Shortages are concentrated.** Across 1,502 stations the network logs **1,458.7 empty-station hours per day**; the worst 20 stations cause **10.7%** of them.
-2. **Rush hours drive the problem.** On weekdays the share of empty stations peaks at **10:00** (8.7% of stations, vs 2.4% at the quietest hour); full stations peak at **11:00** (4.9%).
-3. **Morning commute moves bikes one way.** Between 5:00 and 9:00 on weekdays, stations drain in Asnières-sur-Seine (-34%), Lilas (-21%), Vanves (-21%) and fill up in Paris 2e (+29%), Paris 8e (+26%), Paris 1er (+21%) (change in average fill ratio).
+1. **Shortages are concentrated.** Across 1,502 stations the network logs **1,479.2 empty-station hours per day**; the worst 20 stations cause **10.7%** of them.
+2. **Rush hours drive the problem.** On weekdays the share of empty stations peaks at **10:00** (8.6% of stations, vs 2.4% at the quietest hour); full stations peak at **11:00** (5.1%).
+3. **Morning commute moves bikes one way.** Between 5:00 and 9:00 on weekdays, stations drain in Asnières-sur-Seine (-34%), Lilas (-21%), Vanves (-21%) and fill up in Paris 2e (+30%), Paris 8e (+26%), Paris 1er (+22%) (change in average fill ratio).
 4. **Rain cuts usage.** Weekday daytime activity is **-1%** in rainy slots compared with dry ones.
 
 Full list of the worst stations: [`reports/insights.md`](reports/insights.md).
